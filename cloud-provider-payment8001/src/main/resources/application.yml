@@ -1,0 +1,41 @@
+# 服务端口
+server:
+  port: 8001
+
+spring:
+  # 应用名
+  application:
+    name: cloud-payment-service
+  zipkin:
+    base-url: http://localhost:9411 #监控数据要打到9411zipkin上
+  sleuth:
+    sampler:
+    probability: 1  #采样率值介于0到1，1则表示全部采集
+
+  # 数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource           # 当前数据源操作类型
+    driver-class-name: org.gjt.mm.mysql.Driver             # mysql驱动包
+    url: jdbc:mysql://localhost:3306/db2019?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+
+# 整合mybatis
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  type-aliases-package: com.study.springcloud.entites    #所有Entity别名类所在包
+
+eureka:
+  client:
+    # 表示是否将自己注册进 EurekaServer.默认为true
+    register-with-eureka: true
+    # 是否从EurekaServer抓取已有的注册信息,默认为true.单节点无所谓,集群必须设置为true,才能配合ribbon使用负载均衡
+#    fetchRegistry: true   #单机需为false
+    service-url:
+      #EurekaServer地址
+#      defaultZone: http://localhost:7001/eureka     #单机版
+      defaultZone: http://eureka7001.com:7001/eureka     #单机版
+#      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka     #集群版
+
+
+

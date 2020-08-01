@@ -1,0 +1,66 @@
+server:
+  port: 2003
+
+spring:
+  application:
+    name: seata-account-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.204.201:3306/seata_account
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 数据源其他配置
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall #,log4j
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: my_test_tx_group
+  enable-auto-data-source-proxy: true
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default
+    grouplist:
+      default: localhost:8091
+    enable-degrade: false
+    disable-global-transaction: false
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      serverAddr: localhost
+      group: SEATA_GROUP
+      userName: ""
+      password: ""
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server   # 此处名称徐鹤 seata-server application一致
+      server-addr: localhost
+      namespace:
+      userName: ""
+      password: ""
